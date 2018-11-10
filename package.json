@@ -1,0 +1,124 @@
+{
+  "name": "noot-backend",
+  "version": "1.0.0",
+  "description": "noot-backend",
+  "private": true,
+  "egg": {
+    "typescript": true
+  },
+  "scripts": {
+    "start:test": "better-npm-run start:test",
+    "stop:test": "egg-scripts stop --title=egg-server-noot-test",
+    "start:pre": "better-npm-run start:pre",
+    "stop:pre": "egg-scripts stop --title=egg-server-noot-pre",
+    "start:prod": "better-npm-run start:prod",
+    "stop:prod": "egg-scripts stop --title=egg-server-noot-prod",
+    "start:dev": "better-npm-run start:dev",
+    "stop:dev": "egg-scripts stop --title=egg-server-noot-dev",
+    "local": "better-npm-run start:local",
+    "dev:4": "egg-bin dev --cluster 4",
+    "debug": "egg-bin debug",
+    "test-local": "egg-bin test",
+    "test": "npm run lint -- --fix && npm run test-local",
+    "autod": "autod",
+    "doc": "apidoc -i app/router -o doc"
+  },
+  "betterScripts": {
+    "start:dev": {
+      "command": "egg-scripts start --daemon --title=egg-server-noot-dev --port 8080",
+      "env": {
+        "MOCK_HOME_DIR": "/var/log/noot",
+        "EGG_SERVER_ENV": "dev"
+      }
+    },
+    "start:test": {
+      "command": "egg-scripts start --daemon --title=egg-server-noot-test --port 8080",
+      "env": {
+        "MOCK_HOME_DIR": "/var/log/noot",
+        "EGG_SERVER_ENV": "test"
+      }
+    },
+    "start:prod": {
+      "command": "egg-scripts start --daemon --title=egg-server-noot-prod --port 8080",
+      "env": {
+        "MOCK_HOME_DIR": "/var/log/noot",
+        "EGG_SERVER_ENV": "prod"
+      }
+    },
+    "start:pre": {
+      "command": "egg-scripts start --daemon --title=egg-server-noot-pre --port 8080",
+      "env": {
+        "MOCK_HOME_DIR": "/var/log/noot",
+        "EGG_SERVER_ENV": "pre"
+      }
+    },
+    "start:local": {
+      "command": "egg-bin dev --port 7001",
+      "env": {
+        "EGG_SERVER_ENV": "local"
+      }
+    }
+  },
+  "dependencies": {
+    "better-npm-run": "^0.1.1",
+    "bn.js": "^4.11.8",
+    "egg": "^2.9.1",
+    "egg-async-ivalidator": "^1.0.2",
+    "egg-logger": "^1.7.1",
+    "egg-passport": "^2.0.1",
+    "egg-passport-http-bearer": "^1.1.1",
+    "egg-passport-local": "^1.2.1",
+    "egg-redis": "^2.0.0",
+    "egg-router-plus": "^1.2.0",
+    "egg-scripts": "^2.6.0",
+    "egg-sequelizer": "^1.0.4",
+    "egg-static": "^2.1.0",
+    "egg-view-nunjucks": "^2.2.0",
+    "lodash": "^4.17.10",
+    "md5": "^2.2.1",
+    "mysql": "^2.15.0",
+    "mysql2": "^1.5.3",
+    "phpass": "^0.1.1",
+    "sequelize-pagination": "^1.1.0",
+    "short-unique-id": "^1.1.1",
+    "transaction-hex-decoder": "^1.0.2",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/mocha": "^2.2.48",
+    "@types/node": "^10.5.2",
+    "@types/supertest": "^2.0.5",
+    "apidoc": "^0.17.6",
+    "autod": "^3.0.1",
+    "autod-egg": "^1.1.0",
+    "chalk": "^2.4.1",
+    "egg-bin": "^4.7.1",
+    "egg-ci": "^1.8.0",
+    "egg-cors": "^2.1.0",
+    "egg-generator": "^1.1.2",
+    "egg-mock": "^3.17.3",
+    "egg-ts-helper": "^1.9.0",
+    "eslint": "^4.11.0",
+    "eslint-config-airbnb": "^17.0.0",
+    "eslint-config-egg": "^6.0.0",
+    "eslint-config-prettier": "^2.9.0",
+    "tslib": "^1.9.3",
+    "tslint": "^5.10.0",
+    "typescript": "^2.9.2"
+  },
+  "engines": {
+    "node": ">=8.9.0"
+  },
+  "ci": {
+    "version": "8"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "eslintIgnore": [
+    "coverage"
+  ],
+  "author": "bugall <769088641@qq.com>",
+  "license": "MIT"
+}
