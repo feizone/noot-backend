@@ -140,4 +140,13 @@ module.exports = app => {
   apiAuthorized.get('/permission/department/search', v1.permission.departmentSearch);
   apiAuthorized.post('/permission/department', v1.permission.createDepartment);
   apiAuthorized.put('/permission/department', v1.permission.updateDepartment);
+
+  /**
+   * 部门相关
+   */
+  apiAuthorized.delete('/permission/user/admin/:id', v1.permission.deleteAdminUser);
+  apiAuthorized.get('/permission/user/admin', v1.permission.getAdminUserList);
+  apiAuthorized.post('/permission/user/admin', v1.permission.createAdminUser);
+  apiAuthorized.put('/permission/user/admin/disable/:id', v1.permission.disableAdminUser);
+  apiAuthorized.put('/permission/user/admin/enable/:id', v1.permission.enableAdminUser);
 };

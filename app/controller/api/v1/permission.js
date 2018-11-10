@@ -150,6 +150,45 @@ class PermissionController extends Controller {
       message: 'success',
     };
   }
+
+  async createAdminUser() {
+    await this.ctx.service.api.v1.permission.createAdminUser(this.ctx.request.body);
+    this.ctx.body = {
+      status: 0,
+      message: 'success',
+    };
+  }
+
+  async getAdminUserList() {
+    const data = await this.ctx.service.api.v1.permission.getAdminUserList(this.ctx.request.query);
+    this.ctx.body = {
+      data,
+      status: 0,
+      message: 'success',
+    };
+  }
+
+  async deleteAdminUser() {
+    await this.ctx.service.api.v1.permission.deleteAdminUser(this.ctx.params.id);
+    this.ctx.body = {
+      status: 0,
+      message: 'success',
+    };
+  }
+  async disableAdminUser() {
+    await this.ctx.service.api.v1.permission.disableAdminUser(this.ctx.params.id);
+    this.ctx.body = {
+      status: 0,
+      message: 'success',
+    };
+  }
+  async enableAdminUser() {
+    await this.ctx.service.api.v1.permission.enableAdminUser(this.ctx.params.id);
+    this.ctx.body = {
+      status: 0,
+      message: 'success',
+    };
+  }
 }
 
 module.exports = PermissionController;

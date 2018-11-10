@@ -12,8 +12,42 @@ module.exports = app => {
       primaryKey: true,
       autoIncrement: true,
     },
-    mail: {
+    departmentId: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+    },
+    delFlag: {
+      type: DataTypes.TINYINT(1),
+      allowNull: false,
+      defaultValue: 0,
+    },
+    email: {
       type: DataTypes.STRING(100),
+      allowNull: true,
+      defaultValue: '',
+    },
+    username: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+      defaultValue: '',
+    },
+    roles: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+      defaultValue: '',
+    },
+    sex: {
+      type: DataTypes.TINYINT(1),
+      allowNull: true,
+      defaultValue: '',
+    },
+    status: {
+      type: DataTypes.TINYINT(1),
+      allowNull: true,
+      defaultValue: 0,
+    },
+    type: {
+      type: DataTypes.TINYINT(1),
       allowNull: true,
       defaultValue: '',
     },

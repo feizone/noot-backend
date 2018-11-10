@@ -3,6 +3,7 @@
 const Service = require('../../../../lib/class/Service');
 const _ = require('lodash');
 const moment = require('moment');
+const { generateHash, validateHash } = require('../../../../lib/utils/hash');
 
 class Permission extends Service {
   async menuSearch(options) {
@@ -251,6 +252,14 @@ class Permission extends Service {
       where: { id: id.split(',') },
     });
   }
+  async departmentSearch(options) {
+    const { title } = options;
+    const { Department } = this.app.model;
+    const depsInfo = await Department.findAll({
+      where: { title: { like: `%${title}%` }, delFlag: 0 },
+    });
+    return depsInfo;
+  }
   async getDepartmentList(options) {
     const { Role } = this.app.model;
     const { pageNumber, pageSize } = options;
@@ -299,7 +308,6 @@ class Permission extends Service {
     await Department.create(params);
   }
 
-  
   async updateDepartment(options) {
     const { Department } = this.ctx.model;
     await Department.update({
@@ -313,7 +321,126 @@ class Permission extends Service {
       where: { id: options.id },
     });
   }
-  async getDepartmentAll(options) {
+
+  async createAdminUser(options) {
+    const { User } = this.app.model;
+    // 产看手机号或用户名是否存在
+    const userInfo = await User.find({
+      where: {
+        $or: [{ username: options.username }, { phone: options.phone }],
+      },
+      raw: true,
+    });
+
+    if (!_.isEmpty(userInfo)) {
+      if (userInfo.phone === options.phone) {
+        this.ctx.throw(400, this.app.config.errorConfig.PHONE_HAS_EXIST);
+      } else {
+        this.ctx.throw(400, this.app.config.errorConfig.USERNAME_HAS_EXIST);
+      }
+    }
+    await User.create({
+      avatar: options.avatar,
+      departmentId: options.departmentId,
+      email: options.email,
+      phone: options.phone,
+      password_hash: generateHash(options.password),
+      roles: JSON.stringify(options.roles),
+      sex: options.sex,
+      type: options.type,
+      username: options.username,
+    });
+  }
+
+  async getAdminUserList(options) {
+    const {
+      pageNumber = 1,
+      pageSize = 10,
+      sort,
+      order,
+      startDate,
+      endDate,
+    } = options;
+
+    const { User } = this.app.model;
+    const where = { delFlag: 0 };
+    Object.keys(options).forEach(item => {
+      if (options[item] && !_.includes(['endDate', 'startDate', 'order', 'sort', 'pageNumber', 'pageSize'], item)) {
+        where[item] = options[item];
+      }
+    });
+    if (endDate || startDate) {
+      where.created_at = {
+        gte: startDate,
+        lte: endDate,
+      };
+    }
+
+    const usersInfo = await User.findAll({
+      where,
+      limit: Number(pageSize),
+      offset: (pageNumber - 1) * pageSize,
+      order: [[ sort, order ]],
+      raw: true,
+    });
+    let rolesId = [];
+    usersInfo.forEach(user => {
+      rolesId = rolesId.concat(JSON.parse(user.roles));
+    });
+    const { Role, Department } = this.app.model;
+    const depsId = _.map(usersInfo, 'departmentId');
+    const depsInfo = await Department.findAll({
+      where: { delFlag: 0, id: depsId },
+    });
+    const rolesInfo = await Role.findAll({
+      where: { delFlag: 0, id: rolesId },
+      raw: true,
+    });
+
+    usersInfo.forEach(user => {
+      const tmp = [];
+      JSON.parse(user.roles).forEach(role => {
+        tmp.push(_.filter(rolesInfo, { id: role })[0]);
+      });
+      const depInfo = _.filter(depsInfo, { id: user.departmentId })[0] || {};
+      user.roles = tmp;
+      user.departmentTitle = depInfo.title || '';
+    });
+
+    const total = await User.count({
+      where,
+    });
+
+    return {
+      list: usersInfo,
+      total,
+    };
+  }
+
+  async deleteAdminUser(id) {
+    const { User } = this.ctx.model;
+    await User.update({
+      delFlag: 1,
+    }, {
+      where: { id },
+    });
+  }
+
+  async disableAdminUser(id) {
+    const { User } = this.ctx.model;
+    await User.update({
+      status: -1,
+    }, {
+      where: { id },
+    });
+  }
+  async enableAdminUser(id) {
+    const { User } = this.ctx.model;
+    await User.update({
+      status: 0,
+    }, {
+      where: { id },
+    });
   }
 }
 

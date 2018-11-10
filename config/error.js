@@ -2,23 +2,28 @@
 
 const mapping = {
   10001: '请输入正确的验证码',
-  10002: '您已注册过咯',
   10003: '用户名或密码不正确',
   10005: '账号不存在',
   20001: '登录已过期',
   20002: '验证码已过期,请重新获取',
   20003: '账号不存在',
+  20005: '用户名已存在',
+  20007: '手机号已经存在',
 };
 
 module.exports = {
   MAPPING: mapping,
+  USERNAME_HAS_EXIST: {
+    code: 20005,
+    message: mapping[20005],
+  },
+  PHONE_HAS_EXIST: {
+    code: 20007,
+    message: mapping[20007],
+  },
   VERIFICATION_CODE_ERROR: {
     code: 10001,
     message: mapping[10001],
-  },
-  PHONE_HAS_EXIST: {
-    code: 10002,
-    message: mapping[10002],
   },
   USERNAME_NOT_EXIST: {
     code: 10003,
