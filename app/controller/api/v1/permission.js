@@ -69,7 +69,7 @@ class PermissionController extends Controller {
     };
   }
   async deleteMenu() {
-    await this.ctx.service.api.v1.permission.deleteMenuMenu(this.ctx.params.id);
+    await this.ctx.service.api.v1.permission.deleteMenu(this.ctx.params.id);
     this.ctx.body = {
       status: 0,
       message: 'success',
@@ -153,6 +153,14 @@ class PermissionController extends Controller {
 
   async createAdminUser() {
     await this.ctx.service.api.v1.permission.createAdminUser(this.ctx.request.body);
+    this.ctx.body = {
+      status: 0,
+      message: 'success',
+    };
+  }
+
+  async updateAdminUser() {
+    await this.ctx.service.api.v1.permission.updateAdminUser(this.ctx.request.body);
     this.ctx.body = {
       status: 0,
       message: 'success',

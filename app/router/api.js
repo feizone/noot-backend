@@ -147,6 +147,7 @@ module.exports = app => {
   apiAuthorized.delete('/permission/user/admin/:id', v1.permission.deleteAdminUser);
   apiAuthorized.get('/permission/user/admin', v1.permission.getAdminUserList);
   apiAuthorized.post('/permission/user/admin', v1.permission.createAdminUser);
+  apiAuthorized.put('/permission/user/admin', v1.permission.updateAdminUser);
   apiAuthorized.put('/permission/user/admin/disable/:id', v1.permission.disableAdminUser);
   apiAuthorized.put('/permission/user/admin/enable/:id', v1.permission.enableAdminUser);
 };

@@ -1,7 +1,6 @@
 'use strict';
 
 const errorConfig = require('./error');
-require('egg-apollojs').apollo.setEnv();
 
 module.exports = () => {
   const config = exports = {};

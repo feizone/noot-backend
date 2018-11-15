@@ -15,18 +15,26 @@ class Permission extends Service {
     return depsInfo;
   }
   async getMenuList() {
-    const { Role, Menu } = this.ctx.model;
+    const { Role, Menu, User } = this.ctx.model;
     const { id } = this.ctx.user;
 
-    const RolesInfo = await Role.find({
-      where: { user_id: id, delFlag: 0 },
+    const userInfo = await User.find({
+      where: { id },
+      attributes: [ 'roles' ],
+      raw: true,
+    });
+    const RolesInfo = await Role.findAll({
+      where: { id: JSON.parse(userInfo.roles || '[]'), delFlag: 0 },
       attributes: [ 'permissions' ],
       raw: true,
     });
 
-    const menusPermission = JSON.parse(RolesInfo.permissions);
+    let menusPermission = [];
+    RolesInfo.forEach(role => {
+      menusPermission = menusPermission.concat(JSON.parse(role.permissions));
+    });
     const menusInfo = await Menu.findAll({
-      where: { id: menusPermission, delFlag: 0, status: 0 },
+      where: { id: _.uniq(menusPermission), delFlag: 0, status: 0 },
       raw: true,
     });
 
@@ -349,6 +357,23 @@ class Permission extends Service {
       sex: options.sex,
       type: options.type,
       username: options.username,
+    });
+  }
+
+  async updateAdminUser(options) {
+    const { User } = this.app.model;
+    const { id } = options;
+    await User.update({
+      avatar: options.avatar,
+      departmentId: options.departmentId,
+      email: options.email,
+      phone: options.phone,
+      roles: JSON.stringify(options.roles),
+      sex: options.sex,
+      type: options.type,
+      username: options.username,
+    }, {
+      where: { id },
     });
   }
 

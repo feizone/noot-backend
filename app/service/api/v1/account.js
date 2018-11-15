@@ -137,7 +137,7 @@ class Account extends Service {
     });
 
     if (_.isEmpty(info)) {
-      this.ctx.throw(400, this.app); // 账号不存在
+      this.ctx.throw(400, this.app.config.errorConfig.PHONE_NOT_EXIST); // 账号不存在
     }
 
     const updateUserInfo = await info.refreshAccessToken();
