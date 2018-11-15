@@ -10,7 +10,6 @@ logs/
 *.lock
 !.autod.conf.js
 
-lib/class/*.js
 test/
 app/**/*.map
 test/**/*.map
