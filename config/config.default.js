@@ -52,7 +52,6 @@ module.exports = () => {
         responseMessage = JSON.stringify(responseMessage);
       }
       ctx.body = responseMessage;
-      ctx.status = 400;
     },
   };
   config.security = {

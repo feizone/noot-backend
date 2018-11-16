@@ -23,11 +23,11 @@ module.exports = app => {
         existsUser = await ctx.service.account.findByAccessToken(user.access_token);
 
         if (!existsUser) {
-          return ctx.throw(400, app.config.errorConfig.TOKEN_INVALID);
+          return ctx.throw(401, app.config.errorConfig.TOKEN_INVALID);
         }
         break;
       default:
-        return ctx.throw(400, `passport ${user.provider} is not support yet.`);
+        return ctx.throw(401, `passport ${user.provider} is not support yet.`);
     }
     // 如果没有走缓存
     if (!cacheUseFlag) {

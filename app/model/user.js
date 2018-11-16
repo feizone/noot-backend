@@ -1,6 +1,6 @@
 'use strict';
 const moment = require('moment');
-const { validateHash, randomString } = require('../../lib/utils/hash');
+const { validateHash, randomString, generateHash } = require('../../lib/utils/hash');
 
 module.exports = app => {
   const { Sequelize } = app.model;
@@ -56,6 +56,11 @@ module.exports = app => {
       allowNull: true,
       defaultValue: '',
     },
+    password_hash: {
+      type: DataTypes.STRING(100),
+      allowNull: true,
+      defaultValue: '',
+    },
     nickname: {
       type: DataTypes.STRING(100),
       allowNull: true,
@@ -107,6 +112,7 @@ module.exports = app => {
      * @return {bool} - 是否验证成功
      */
     validatePassword(password) {
+      console.log(password, this.password_hash);
       return validateHash(password, this.password_hash);
     },
 
@@ -121,17 +127,6 @@ module.exports = app => {
         access_token_expire_at: moment().add(10000, 'days'), // 7天有效期
       });
     },
-
-    toJSON() {
-      const data = Object.assign({}, this.get());
-      [
-        'password_hash',
-        'access_token',
-        'access_token_expire_at',
-      ].map(key => delete data[key]);
-      return data;
-    },
-
   });
   return User;
 };
