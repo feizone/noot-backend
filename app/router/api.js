@@ -55,4 +55,9 @@ module.exports = app => {
   apiAuthorized.put('/permission/user/admin', v1.permission.updateAdminUser);
   apiAuthorized.put('/permission/user/admin/disable/:id', v1.permission.disableAdminUser);
   apiAuthorized.put('/permission/user/admin/enable/:id', v1.permission.enableAdminUser);
+
+  /**
+   * 公共接口
+   */
+  apiAuthorized.post('/common/upload', v1.common.upload);
 };
