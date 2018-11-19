@@ -37,7 +37,8 @@ class Common extends Service {
         create_user_id: id,
       }));
     });
-    return await Promise.all(p);
+    await Promise.all(p);
+    return p.length;
   }
 }
 

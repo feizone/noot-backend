@@ -60,4 +60,10 @@ module.exports = app => {
    * 公共接口
    */
   apiAuthorized.post('/common/upload', v1.common.upload);
+
+
+  /**
+   * 业务接口
+   */
+  apiAuthorized.get('/business/user/record', v1.business.userRecord);
 };
