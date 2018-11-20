@@ -372,6 +372,7 @@ class Permission extends Service {
       sex: options.sex,
       type: options.type,
       username: options.username,
+      record: options.record,
     }, {
       where: { id },
     });
