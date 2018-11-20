@@ -5,6 +5,43 @@ const _ = require('lodash');
 const moment = require('moment');
 const { generateHash, validateHash } = require('../../../../lib/utils/hash');
 
+function findRelation(menusInfo) {
+  const tmp = {};
+  let hasPushItemFlag = [];
+  _.sortBy(menusInfo, [ 'level' ]).forEach(item => {
+    // 儿子节点
+    const childList = _.filter(menusInfo, { parentId: item.id });
+    // 孙子节点
+    const thirdTmp = {};
+    _.sortBy(childList, [ 'level' ]).forEach(third => {
+      const thirdList = _.filter(menusInfo, { parentId: third.id });
+      if (!_.includes(hasPushItemFlag, third.id)) {
+        thirdTmp[third.id] = third;
+        thirdTmp[third.id].children = thirdList;
+      }
+      hasPushItemFlag = hasPushItemFlag.concat(_.map(thirdList, 'id'));
+    });
+
+    if (!_.includes(hasPushItemFlag, item.id)) {
+      tmp[item.id] = item;
+      // 如果找到儿子节点
+      const answer = [];
+      Object.keys(thirdTmp).forEach(level => {
+        answer.push(thirdTmp[level]);
+      });
+      tmp[item.id].children = answer;
+    }
+
+    hasPushItemFlag = hasPushItemFlag.concat(_.map(childList, 'id'));
+  });
+
+  const answer = [];
+  Object.keys(tmp).forEach(level => {
+    answer.push(tmp[level]);
+  });
+  return answer;
+}
+
 class Permission extends Service {
   async menuSearch(options) {
     const { title } = options;
@@ -38,22 +75,7 @@ class Permission extends Service {
       raw: true,
     });
 
-    const tmp = {};
-    let hasPushItemFlag = [];
-    _.sortBy(menusInfo, [ 'level' ]).forEach(item => {
-      const childList = _.filter(menusInfo, { parentId: item.id });
-      if (!_.includes(hasPushItemFlag, item.id)) {
-        tmp[item.id] = item;
-        tmp[item.id].children = childList;
-      }
-
-      hasPushItemFlag = hasPushItemFlag.concat(_.map(childList, 'id'));
-    });
-
-    const answer = [];
-    Object.keys(tmp).forEach(level => {
-      answer.push(tmp[level]);
-    });
+    const answer = findRelation(menusInfo);
     return answer;
   }
   async getMenuAll() {
@@ -64,22 +86,7 @@ class Permission extends Service {
       where: { delFlag: 0 },
     });
 
-    const tmp = {};
-    let hasPushItemFlag = [];
-    _.sortBy(menusInfo, [ 'level' ]).forEach(item => {
-      const childList = _.filter(menusInfo, { parentId: item.id });
-      if (!_.includes(hasPushItemFlag, item.id)) {
-        tmp[item.id] = item;
-        tmp[item.id].children = childList;
-      }
-
-      hasPushItemFlag = hasPushItemFlag.concat(_.map(childList, 'id'));
-    });
-
-    const answer = [];
-    Object.keys(tmp).forEach(level => {
-      answer.push(tmp[level]);
-    });
+    const answer = findRelation(menusInfo);
     return answer;
   }
   async createMenu(options) {
