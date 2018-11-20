@@ -116,7 +116,6 @@ module.exports = app => {
      * @return {bool} - 是否验证成功
      */
     validatePassword(password) {
-      console.log(password, this.password_hash);
       return validateHash(password, this.password_hash);
     },
 
