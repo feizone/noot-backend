@@ -10,6 +10,7 @@ const mapping = {
   20003: '账号不存在',
   20005: '用户名已存在',
   20007: '手机号已经存在',
+  20008: '用户积分不足',
 };
 
 module.exports = {
@@ -49,5 +50,9 @@ module.exports = {
   CODE_TIME_OUT: {
     code: 20002,
     message: mapping[20002],
+  },
+  NOT_ENOUGH_RECORD: {
+    code: 20008,
+    message: mapping[20008],
   },
 };

@@ -5,9 +5,9 @@ const moment = require('moment');
 
 class Business extends Service {
   async userRecord(options) {
-    const { page = 1, pageSize = 20, realname, idcard, phone } = options;
+    const { page = 1, pageSize = 20, realname, idcard, phone, needRecord } = options;
     const where = {};
-    const { Record } = this.ctx.model;
+    const { Record, User } = this.ctx.model;
     if (realname) where.realname = realname;
     if (idcard) where.idcard = idcard;
     if (phone) where.phone = phone;
@@ -19,9 +19,22 @@ class Business extends Service {
     });
 
     const total = await Record.count({ where });
+    const userInfo = await User.find({
+      where: { id: this.ctx.user.id },
+      attributes: [ 'id', 'record' ],
+    });
+    if (userInfo.dataValues.record < 1) {
+      this.throw(400, this.config.errorConfig.NOT_ENOUGH_RECORD);
+    }
+    if (needRecord !== 'false') {
+      userInfo.record = userInfo.record - 1;
+      await userInfo.save();
+    }
+
     return {
       list: data,
       total,
+      record: userInfo.record,
     };
   }
 
