@@ -28,7 +28,7 @@ class Account extends Service {
   }
 
   async findByUser(username) {
-    const where = { username };
+    const where = { username, delFlag: 0, status: 0 };
     return this.ctx.model.User.findOne({ where });
   }
 }
