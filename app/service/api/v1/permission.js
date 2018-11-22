@@ -35,9 +35,15 @@ function findRelation(menusInfo) {
     hasPushItemFlag = hasPushItemFlag.concat(_.map(childList, 'id'));
   });
 
-  const answer = [];
+  let answer = [];
   Object.keys(tmp).forEach(level => {
     answer.push(tmp[level]);
+  });
+  answer = _.orderBy(answer, [ 'sortOrder' ], [ 'desc' ]);
+  answer.forEach(item => {
+    if (item.children && item.children.length) {
+      item.children = _.orderBy(item.children, [ 'sortOrder' ], [ 'desc' ]);
+    }
   });
   return answer;
 }
@@ -47,6 +53,7 @@ class Permission extends Service {
     const { title } = options;
     const { Menu } = this.app.model;
     const depsInfo = await Menu.findAll({
+      order: [[ 'sortOrder', 'desc' ]],
       where: { title: { like: `%${title}%` }, delFlag: 0 },
     });
     return depsInfo;
@@ -72,6 +79,7 @@ class Permission extends Service {
     });
     const menusInfo = await Menu.findAll({
       where: { id: _.uniq(menusPermission), delFlag: 0, status: 0 },
+      order: [[ 'sortOrder', 'desc' ]],
       raw: true,
     });
 
@@ -84,6 +92,7 @@ class Permission extends Service {
     const menusInfo = await Menu.findAll({
       raw: true,
       where: { delFlag: 0 },
+      order: [[ 'sortOrder', 'desc' ]],
     });
 
     const answer = findRelation(menusInfo);
@@ -159,6 +168,7 @@ class Permission extends Service {
     });
     const menusInfo = await Menu.findAll({
       where: { id: menusId, delFlag: 0 },
+      order: [[ 'sortOrder', 'desc' ]],
       raw: true,
     });
     const departmentsInfo = await Department.findAll({
