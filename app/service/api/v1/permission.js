@@ -106,6 +106,7 @@ class Permission extends Service {
       status: options.status,
       title: options.title,
       type: options.type,
+      method: options.method,
     });
   }
   async updateMenu(options) {
@@ -123,6 +124,7 @@ class Permission extends Service {
       status: options.status,
       title: options.title,
       type: options.type,
+      method: options.method,
     }, {
       where: { id: options.id },
     });

@@ -49,7 +49,6 @@ module.exports = app => {
   /**
    * 部门相关
    */
-  apiAuthorized.delete('/permission/user/admin/:id', v1.permission.deleteAdminUser);
   apiAuthorized.get('/permission/user/admin', v1.permission.getAdminUserList);
   apiAuthorized.post('/permission/user/admin', v1.permission.createAdminUser);
   apiAuthorized.put('/permission/user/admin', v1.permission.updateAdminUser);
@@ -66,4 +65,5 @@ module.exports = app => {
    * 业务接口
    */
   apiAuthorized.get('/business/user/record', v1.business.userRecord);
+  apiAuthorized.delete('/permission/user/admin/:id', v1.permission.deleteAdminUser);
 };
