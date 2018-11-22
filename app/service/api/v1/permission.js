@@ -350,7 +350,7 @@ class Permission extends Service {
   }
 
   async createAdminUser(options) {
-    const { User } = this.app.model;
+    const { User, Role } = this.app.model;
     // 产看手机号或用户名是否存在
     const userInfo = await User.find({
       where: {
@@ -366,13 +366,23 @@ class Permission extends Service {
         this.ctx.throw(400, this.app.config.errorConfig.USERNAME_HAS_EXIST);
       }
     }
+    const defaultRole = Role.find({
+      where: { isDefault: 1, delFlag: 0 },
+      attributes: [ 'id' ],
+      raw: true,
+    });
+
+    // 必须设置默认角色
+    if (_.isEmpty(options.roles) && _.isEmpty(defaultRole)) {
+      this.ctx.throw(400, this.app.config.errorConfig.NOT_DEFAULT_ROLE);
+    }
     await User.create({
       avatar: options.avatar,
       departmentId: options.departmentId,
       email: options.email,
       phone: options.phone,
       password_hash: generateHash(options.password),
-      roles: JSON.stringify(options.roles),
+      roles: JSON.stringify(options.roles || defaultRole.id),
       sex: options.sex,
       type: options.type,
       username: options.username,
