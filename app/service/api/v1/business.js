@@ -25,7 +25,7 @@ class Business extends Service {
       attributes: [ 'id', 'record' ],
     });
     if (userInfo.dataValues.record < 1) {
-      this.throw(400, this.config.errorConfig.NOT_ENOUGH_RECORD);
+      this.ctx.throw(400, this.config.errorConfig.NOT_ENOUGH_RECORD);
     }
     if (needRecord !== 'false') {
       userInfo.record = userInfo.record - 1;
