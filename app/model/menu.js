@@ -103,6 +103,10 @@ module.exports = app => {
       type: DataTypes.INTEGER(11),
       allowNull: false,
     },
+    method: {
+      type: DataTypes.CHAR(10),
+      allowNull: false,
+    },
     created_at: {
       type: DataTypes.DATE,
       allowNull: true,
