@@ -28,12 +28,11 @@ class Common extends Service {
     content[0].data.shift();
     content[0].data.forEach(item => {
       p.push(Record.create({
-        realname: item[0],
-        money: item[1] * 100,
-        discredit_date: item[2],
-        discredit_times: item[3],
-        phone: item[4],
-        idcard: item[5],
+        realname: item[1],
+        idcard: item[2],
+        phone: item[3],
+        money: item[4] * 100,
+        discredit_date: item[5],
         create_user_id: id,
       }));
     });

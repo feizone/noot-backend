@@ -16,6 +16,7 @@ class Business extends Service {
       where,
       offset: (page - 1) * pageSize,
       limit: Number(pageSize),
+      order: [[ 'created_at', 'desc' ]],
     });
 
     const total = await Record.count({ where });
