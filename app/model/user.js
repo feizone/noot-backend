@@ -19,6 +19,7 @@ module.exports = app => {
     record: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
+      defaultValue: 0,
     },
     delFlag: {
       type: DataTypes.TINYINT(1),

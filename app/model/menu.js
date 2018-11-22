@@ -106,6 +106,7 @@ module.exports = app => {
     method: {
       type: DataTypes.CHAR(10),
       allowNull: false,
+      defaultValue: 'GET',
     },
     created_at: {
       type: DataTypes.DATE,
