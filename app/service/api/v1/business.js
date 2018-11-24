@@ -2,6 +2,7 @@
 
 const Service = require('../../../../lib/class/Service');
 const moment = require('moment');
+const _ = require('lodash');
 
 class Business extends Service {
   async userRecord(options) {
@@ -17,8 +18,16 @@ class Business extends Service {
       offset: (page - 1) * pageSize,
       limit: Number(pageSize),
       order: [[ 'created_at', 'desc' ]],
+      raw: true,
     });
-
+    const users = await User.findAll({
+      where: { id: _.map(data, 'create_user_id') },
+      raw: true,
+    });
+    data.forEach(record => {
+      record.create_username = _.filter(users, { id: record.create_user_id })[0].username || '未知';
+      record.discredit_date = moment(record.discredit_date).format('YYYY-MM-DD');
+    });
     const total = await Record.count({ where });
     const userInfo = await User.find({
       where: { id: this.ctx.user.id },
@@ -27,7 +36,7 @@ class Business extends Service {
     if (userInfo.dataValues.record < 1) {
       this.ctx.throw(400, this.config.errorConfig.NOT_ENOUGH_RECORD);
     }
-    if (needRecord !== 'false') {
+    if (needRecord !== 'false' && data.length) {
       userInfo.record = userInfo.record - 1;
       await userInfo.save();
     }

@@ -30,9 +30,8 @@ class Common extends Service {
       p.push(Record.create({
         realname: item[1],
         idcard: item[2],
-        phone: item[3],
         money: item[4] * 100,
-        discredit_date: item[5],
+        discredit_date: moment(item[5]).format('YYYY-MM-DD hh:mm:ss'),
         create_user_id: id,
       }));
     });
