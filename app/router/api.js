@@ -65,5 +65,6 @@ module.exports = app => {
    * 业务接口
    */
   apiAuthorized.get('/business/user/record', v1.business.userRecord);
+  apiAuthorized.get('/business/record/total', v1.business.total);
   apiAuthorized.delete('/permission/user/admin/:id', v1.permission.deleteAdminUser);
 };

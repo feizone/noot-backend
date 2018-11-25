@@ -49,6 +49,11 @@ class Business extends Service {
   }
 
 
+  async total() {
+    const { Record } = this.ctx.model;
+    const total = Record.count({});
+    return total;
+  }
   async info() {
     const { User } = this.app.model;
     const { id } = this.ctx.user;

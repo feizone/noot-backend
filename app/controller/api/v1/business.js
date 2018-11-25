@@ -11,6 +11,14 @@ class BusinessController extends Controller {
       message: 'success',
     };
   }
+  async total() {
+    const data = await this.ctx.service.api.v1.business.total();
+    this.ctx.body = {
+      data,
+      status: 0,
+      message: 'success',
+    };
+  }
 }
 
 module.exports = BusinessController;
