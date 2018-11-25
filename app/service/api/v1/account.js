@@ -172,7 +172,7 @@ class Account extends Service {
     const { id } = this.ctx.user;
     const info = await User.find({
       where: { id },
-      attributes: [ 'phone', 'id', 'nickname', 'username' ],
+      attributes: [ 'phone', 'id', 'nickname', 'username', 'record' ],
       raw: true,
     });
     return info;
