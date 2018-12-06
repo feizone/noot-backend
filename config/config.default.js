@@ -65,6 +65,13 @@ module.exports = () => {
     origin: '*',
     allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
   };
+  config.multipart = {
+    fileSize: '500mb',
+    whitelist: [
+      '.csv',
+      '.xlsx',
+    ],
+  };
   config.errorConfig = errorConfig;
   return config;
 };

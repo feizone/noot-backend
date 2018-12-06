@@ -54,5 +54,18 @@ module.exports = app => {
   apiAuthorized.put('/permission/user/admin', v1.permission.updateAdminUser);
   apiAuthorized.put('/permission/user/admin/disable/:id', v1.permission.disableAdminUser);
   apiAuthorized.put('/permission/user/admin/enable/:id', v1.permission.enableAdminUser);
+
+  /**
+   * 公共接口
+   */
+  apiAuthorized.post('/common/upload', v1.common.upload);
+
+
+  /**
+   * 业务接口
+   */
+  apiAuthorized.get('/business/user/record', v1.business.userRecord);
+  apiAuthorized.get('/business/record/total', v1.business.total);
+  apiAuthorized.post('/business/user/record/del', v1.business.deleteUserRecord);
   apiAuthorized.delete('/permission/user/admin/:id', v1.permission.deleteAdminUser);
 };

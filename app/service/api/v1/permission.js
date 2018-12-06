@@ -35,9 +35,15 @@ function findRelation(menusInfo) {
     hasPushItemFlag = hasPushItemFlag.concat(_.map(childList, 'id'));
   });
 
-  const answer = [];
+  let answer = [];
   Object.keys(tmp).forEach(level => {
     answer.push(tmp[level]);
+  });
+  answer = _.orderBy(answer, [ 'sortOrder' ], [ 'desc' ]);
+  answer.forEach(item => {
+    if (item.children && item.children.length) {
+      item.children = _.orderBy(item.children, [ 'sortOrder' ], [ 'desc' ]);
+    }
   });
   return answer;
 }
@@ -47,6 +53,7 @@ class Permission extends Service {
     const { title } = options;
     const { Menu } = this.app.model;
     const depsInfo = await Menu.findAll({
+      order: [[ 'sortOrder', 'desc' ]],
       where: { title: { like: `%${title}%` }, delFlag: 0 },
     });
     return depsInfo;
@@ -72,6 +79,7 @@ class Permission extends Service {
     });
     const menusInfo = await Menu.findAll({
       where: { id: _.uniq(menusPermission), delFlag: 0, status: 0 },
+      order: [[ 'sortOrder', 'desc' ]],
       raw: true,
     });
 
@@ -84,6 +92,7 @@ class Permission extends Service {
     const menusInfo = await Menu.findAll({
       raw: true,
       where: { delFlag: 0 },
+      order: [[ 'sortOrder', 'desc' ]],
     });
 
     const answer = findRelation(menusInfo);
@@ -159,6 +168,7 @@ class Permission extends Service {
     });
     const menusInfo = await Menu.findAll({
       where: { id: menusId, delFlag: 0 },
+      order: [[ 'sortOrder', 'desc' ]],
       raw: true,
     });
     const departmentsInfo = await Department.findAll({
@@ -340,7 +350,7 @@ class Permission extends Service {
   }
 
   async createAdminUser(options) {
-    const { User } = this.app.model;
+    const { User, Role } = this.app.model;
     // 产看手机号或用户名是否存在
     const userInfo = await User.find({
       where: {
@@ -356,13 +366,23 @@ class Permission extends Service {
         this.ctx.throw(400, this.app.config.errorConfig.USERNAME_HAS_EXIST);
       }
     }
+    const defaultRole = Role.find({
+      where: { isDefault: 1, delFlag: 0 },
+      attributes: [ 'id' ],
+      raw: true,
+    });
+
+    // 必须设置默认角色
+    if (_.isEmpty(options.roles) && _.isEmpty(defaultRole)) {
+      this.ctx.throw(400, this.app.config.errorConfig.NOT_DEFAULT_ROLE);
+    }
     await User.create({
       avatar: options.avatar,
       departmentId: options.departmentId,
       email: options.email,
       phone: options.phone,
       password_hash: generateHash(options.password),
-      roles: JSON.stringify(options.roles),
+      roles: JSON.stringify(options.roles || defaultRole.id),
       sex: options.sex,
       type: options.type,
       username: options.username,
@@ -381,6 +401,7 @@ class Permission extends Service {
       sex: options.sex,
       type: options.type,
       username: options.username,
+      record: options.record,
     }, {
       where: { id },
     });

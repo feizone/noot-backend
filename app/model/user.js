@@ -16,6 +16,11 @@ module.exports = app => {
       type: DataTypes.INTEGER(11),
       allowNull: false,
     },
+    record: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+      defaultValue: 0,
+    },
     delFlag: {
       type: DataTypes.TINYINT(1),
       allowNull: false,
@@ -112,7 +117,6 @@ module.exports = app => {
      * @return {bool} - 是否验证成功
      */
     validatePassword(password) {
-      console.log(password, this.password_hash);
       return validateHash(password, this.password_hash);
     },
 

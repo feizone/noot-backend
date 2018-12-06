@@ -3,6 +3,10 @@ exports.redis = {
   enable: true,
   package: 'egg-redis',
 };
+exports.multipart = {
+  enable: true,
+  package: 'egg-multipart',
+};
 exports.passport = {
   enable: true,
   package: 'egg-passport',
